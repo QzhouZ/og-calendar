@@ -25,7 +25,7 @@
 #   ./build_ipa.sh -t YOUR_PERSONAL_TEAM_ID -m development
 # ============================================================
 
-set -e
+set -eo pipefail
 
 # Pre-flight checks
 check_xcode() {
@@ -195,7 +195,7 @@ if [ "$UNSIGNED" = true ]; then
         ENABLE_BITCODE=NO \
         PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
         GCC_PREPROCESSOR_DEFINITIONS="DEBUG=0" \
-        | tail -20
+        2>&1 | tee "${BUILD_DIR}/build.log" | tail -30
 
     if [ $? -ne 0 ]; then
         echo -e "${RED}Build failed!${NC}"
@@ -306,7 +306,7 @@ xcodebuild archive \
     CODE_SIGN_STYLE=Automatic \
     DEVELOPMENT_TEAM="${TEAM_ID}" \
     PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
-    | tail -20
+    2>&1 | tee "${BUILD_DIR}/archive.log" | tail -30
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}Archive failed!${NC}"
