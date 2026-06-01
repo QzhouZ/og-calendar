@@ -11,6 +11,9 @@ final class CalendarViewModel: ObservableObject {
     @Published var events: [CalendarEvent] = []
     @Published var isAuthorized: Bool = false
 
+    /// 整月事件按日期 key (yyyy-MM-dd) 分组
+    private var eventsByDay: [String: [CalendarEvent]] = [:]
+
     private let lunarService = LunarCalendarService.shared
     private let holidayService = HolidayService.shared
     private let solarTermService = SolarTermService.shared
@@ -23,6 +26,7 @@ final class CalendarViewModel: ObservableObject {
         generateCalendarDays()
         Task {
             await requestCalendarAccess()
+            await loadEventsForCurrentMonth()
             await loadEventsForSelectedDate()
         }
     }
@@ -42,6 +46,7 @@ final class CalendarViewModel: ObservableObject {
             currentMonth = newMonth
             generateCalendarDays()
         }
+        Task { await loadEventsForCurrentMonth() }
     }
 
     func goToNextMonth() {
@@ -50,6 +55,7 @@ final class CalendarViewModel: ObservableObject {
             currentMonth = newMonth
             generateCalendarDays()
         }
+        Task { await loadEventsForCurrentMonth() }
     }
 
     func goToToday() {
@@ -58,7 +64,10 @@ final class CalendarViewModel: ObservableObject {
             selectedDate = Date()
             generateCalendarDays()
         }
-        Task { await loadEventsForSelectedDate() }
+        Task {
+            await loadEventsForCurrentMonth()
+            await loadEventsForSelectedDate()
+        }
     }
 
     func selectDate(_ date: Date) {
@@ -141,6 +150,9 @@ final class CalendarViewModel: ObservableObject {
 
         let id = String(format: "%04d-%02d-%02d", year, month, day)
 
+        // 查询该天是否有事件
+        let dayEvents = eventsByDay[id] ?? []
+
         var calendarDay = CalendarDay(
             id: id,
             date: date,
@@ -160,10 +172,44 @@ final class CalendarViewModel: ObservableObject {
             solarTerm: solarTerm
         )
         calendarDay.isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
+        calendarDay.hasEvents = !dayEvents.isEmpty
+        calendarDay.eventCount = dayEvents.count
         return calendarDay
     }
 
     // MARK: - Load Events
+
+    /// 加载整月事件（用于日历网格显示事件圆点）
+    func loadEventsForCurrentMonth() async {
+        guard isAuthorized else { return }
+
+        let year = calendar.component(.year, from: currentMonth)
+        let month = calendar.component(.month, from: currentMonth)
+
+        let monthEvents = await eventKitService.fetchEvents(for: year, month: month)
+
+        // 将 [Date: [CalendarEvent]] 转为 [String: [CalendarEvent]]
+        var byDay: [String: [CalendarEvent]] = [:]
+        var countByDay: [String: Int] = [:]
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+
+        for (date, events) in monthEvents {
+            let key = formatter.string(from: date)
+            byDay[key] = events
+            countByDay[key] = events.count
+        }
+        eventsByDay = byDay
+
+        // 缓存到 AppGroup 供 Widget 使用
+        appGroupManager.cacheMonthEvents(countByDay, year: year, month: month)
+
+        // 重新生成日历天数以更新事件标记
+        generateCalendarDays()
+
+        // 刷新 Widget
+        WidgetCenter.shared.reloadAllTimelines()
+    }
 
     func loadEventsForSelectedDate() async {
         guard isAuthorized else {

@@ -23,6 +23,17 @@ struct DayCell: View {
                 .foregroundColor(subTextColor)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
+
+            // 事件圆点指示器
+            if day.hasEvents {
+                Circle()
+                    .fill(day.isSelected ? Color.white : Color(hex: "3B7DD8"))
+                    .frame(width: 5, height: 5)
+            } else {
+                Circle()
+                    .fill(Color.clear)
+                    .frame(width: 5, height: 5)
+            }
         }
         .frame(height: 56)
         .frame(maxWidth: .infinity)
@@ -61,6 +72,9 @@ struct DayCell: View {
     }
 
     private var subTextColor: Color {
+        if day.isSelected {
+            return .white.opacity(0.85)
+        }
         if day.holiday?.isHoliday == true {
             return Color(hex: "E8743A")
         }

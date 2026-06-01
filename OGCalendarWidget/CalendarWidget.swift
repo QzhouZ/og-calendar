@@ -13,9 +13,12 @@ struct WidgetCalendarDay: Codable {
     let displayText: String
     let isToday: Bool
     let isSelected: Bool
+    let isCurrentMonth: Bool
     let isHoliday: Bool
     let isWorkday: Bool
     let holidayName: String?
+    let hasEvents: Bool
+    let eventCount: Int
 }
 
 struct WidgetEvent: Codable, Identifiable {
@@ -30,6 +33,7 @@ struct WidgetEvent: Codable, Identifiable {
 struct CalendarEntry: TimelineEntry {
     let date: Date
     let selectedDate: Date
+    let displayMonth: Date
     let calendarDays: [WidgetCalendarDay]
     let events: [WidgetEvent]
 }
@@ -47,6 +51,7 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
         return CalendarEntry(
             date: today,
             selectedDate: today,
+            displayMonth: today,
             calendarDays: generatePlaceholderDays(),
             events: []
         )
@@ -74,33 +79,46 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
         let solarTermService = SolarTermService.shared
         let appGroupManager = AppGroupManager.shared
 
+        // 读取 displayMonth，如果没有则使用 selectedDate 所在月
+        let displayMonth = appGroupManager.displayMonth ?? selectedDate
+
         let calendar = Calendar(identifier: .gregorian)
-        let year = calendar.component(.year, from: selectedDate)
-        let month = calendar.component(.month, from: selectedDate)
+        let year = calendar.component(.year, from: displayMonth)
+        let month = calendar.component(.month, from: displayMonth)
 
         var components = DateComponents()
         components.year = year
         components.month = month
         components.day = 1
         guard let firstOfMonth = calendar.date(from: components) else {
-            return CalendarEntry(date: Date(), selectedDate: selectedDate, calendarDays: [], events: [])
+            return CalendarEntry(date: Date(), selectedDate: selectedDate, displayMonth: displayMonth, calendarDays: [], events: [])
         }
 
         let firstWeekday = calendar.component(.weekday, from: firstOfMonth)
         let leadingDays = firstWeekday - 1
         let daysInMonth = calendar.range(of: .day, in: .month, for: firstOfMonth)?.count ?? 30
 
+        // 读取月度事件缓存
+        let monthEventCounts = appGroupManager.cachedMonthEvents(year: year, month: month)
+
         var widgetDays: [WidgetCalendarDay] = []
 
         // 上月补齐
         if leadingDays > 0 {
-            guard let prevMonth = calendar.date(byAdding: .month, value: -1, to: firstOfMonth) else { return CalendarEntry(date: Date(), selectedDate: selectedDate, calendarDays: [], events: []) }
+            guard let prevMonth = calendar.date(byAdding: .month, value: -1, to: firstOfMonth) else {
+                return CalendarEntry(date: Date(), selectedDate: selectedDate, displayMonth: displayMonth, calendarDays: [], events: [])
+            }
             let daysInPrevMonth = calendar.range(of: .day, in: .month, for: prevMonth)?.count ?? 30
             for i in (daysInPrevMonth - leadingDays + 1)...daysInPrevMonth {
                 var comps = calendar.dateComponents([.year, .month], from: prevMonth)
                 comps.day = i
                 if let date = calendar.date(from: comps) {
-                    widgetDays.append(makeWidgetDay(from: date, isSelected: false, lunarService: lunarService, holidayService: holidayService, solarTermService: solarTermService))
+                    widgetDays.append(makeWidgetDay(
+                        from: date, isSelected: false, isCurrentMonth: false,
+                        monthEventCounts: monthEventCounts,
+                        lunarService: lunarService, holidayService: holidayService,
+                        solarTermService: solarTermService
+                    ))
                 }
             }
         }
@@ -113,19 +131,31 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
             comps.day = day
             if let date = calendar.date(from: comps) {
                 let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
-                widgetDays.append(makeWidgetDay(from: date, isSelected: isSelected, lunarService: lunarService, holidayService: holidayService, solarTermService: solarTermService))
+                widgetDays.append(makeWidgetDay(
+                    from: date, isSelected: isSelected, isCurrentMonth: true,
+                    monthEventCounts: monthEventCounts,
+                    lunarService: lunarService, holidayService: holidayService,
+                    solarTermService: solarTermService
+                ))
             }
         }
 
-        // 下月补齐到 35
-        let remaining = 35 - widgetDays.count
+        // 下月补齐到 42 天（6 行）
+        let remaining = 42 - widgetDays.count
         if remaining > 0 {
-            guard let nextMonth = calendar.date(byAdding: .month, value: 1, to: firstOfMonth) else { return CalendarEntry(date: Date(), selectedDate: selectedDate, calendarDays: widgetDays, events: []) }
+            guard let nextMonth = calendar.date(byAdding: .month, value: 1, to: firstOfMonth) else {
+                return CalendarEntry(date: Date(), selectedDate: selectedDate, displayMonth: displayMonth, calendarDays: widgetDays, events: [])
+            }
             for day in 1...remaining {
                 var comps = calendar.dateComponents([.year, .month], from: nextMonth)
                 comps.day = day
                 if let date = calendar.date(from: comps) {
-                    widgetDays.append(makeWidgetDay(from: date, isSelected: false, lunarService: lunarService, holidayService: holidayService, solarTermService: solarTermService))
+                    widgetDays.append(makeWidgetDay(
+                        from: date, isSelected: false, isCurrentMonth: false,
+                        monthEventCounts: monthEventCounts,
+                        lunarService: lunarService, holidayService: holidayService,
+                        solarTermService: solarTermService
+                    ))
                 }
             }
         }
@@ -137,10 +167,18 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
             WidgetEvent(id: event.id, title: event.title, timeText: event.durationText, colorHex: event.calendarColorHex)
         }
 
-        return CalendarEntry(date: Date(), selectedDate: selectedDate, calendarDays: widgetDays, events: widgetEvents)
+        return CalendarEntry(date: Date(), selectedDate: selectedDate, displayMonth: displayMonth, calendarDays: widgetDays, events: widgetEvents)
     }
 
-    private func makeWidgetDay(from date: Date, isSelected: Bool, lunarService: LunarCalendarService, holidayService: HolidayService, solarTermService: SolarTermService) -> WidgetCalendarDay {
+    private func makeWidgetDay(
+        from date: Date,
+        isSelected: Bool,
+        isCurrentMonth: Bool,
+        monthEventCounts: [String: Int],
+        lunarService: LunarCalendarService,
+        holidayService: HolidayService,
+        solarTermService: SolarTermService
+    ) -> WidgetCalendarDay {
         let calendar = Calendar(identifier: .gregorian)
         let year = calendar.component(.year, from: date)
         let month = calendar.component(.month, from: date)
@@ -159,22 +197,29 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
         else if lunarInfo.day == 1 { displayText = lunarInfo.monthName }
         else { displayText = lunarInfo.dayName }
 
+        // 查询事件数量
+        let dateKey = String(format: "%04d-%02d-%02d", year, month, day)
+        let eventCount = monthEventCounts[dateKey] ?? 0
+
         return WidgetCalendarDay(
             day: day, month: month, year: year, weekday: weekday,
             lunarDayName: lunarInfo.dayName, lunarMonthName: lunarInfo.monthName,
             displayText: displayText,
             isToday: calendar.isDateInToday(date),
             isSelected: isSelected,
+            isCurrentMonth: isCurrentMonth,
             isHoliday: holiday?.isHoliday ?? false,
             isWorkday: holiday?.isWorkday ?? false,
-            holidayName: holiday?.name
+            holidayName: holiday?.name,
+            hasEvents: eventCount > 0,
+            eventCount: eventCount
         )
     }
 
     private func generatePlaceholderDays() -> [WidgetCalendarDay] {
         let today = Date()
         let calendar = Calendar.current
-        return (0..<35).map { offset in
+        return (0..<42).map { offset in
             let date = calendar.date(byAdding: .day, value: offset - 15, to: today)!
             return WidgetCalendarDay(
                 day: calendar.component(.day, from: date),
@@ -184,7 +229,9 @@ struct CalendarTimelineProvider: AppIntentTimelineProvider {
                 lunarDayName: "初一", lunarMonthName: "正月",
                 displayText: "\(calendar.component(.day, from: date))",
                 isToday: offset == 15, isSelected: offset == 15,
-                isHoliday: false, isWorkday: false, holidayName: nil
+                isCurrentMonth: true,
+                isHoliday: false, isWorkday: false, holidayName: nil,
+                hasEvents: false, eventCount: 0
             )
         }
     }

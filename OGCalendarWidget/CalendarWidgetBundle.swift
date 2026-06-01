@@ -6,5 +6,6 @@ struct CalendarWidgetBundle: WidgetBundle {
     var body: some Widget {
         CalendarWidgetSmall()
         CalendarWidgetMedium()
+        CalendarWidgetLarge()
     }
 }

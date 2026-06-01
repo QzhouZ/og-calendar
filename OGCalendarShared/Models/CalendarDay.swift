@@ -39,4 +39,6 @@ struct CalendarDay: Identifiable, Sendable {
     }
 
     var isSelected: Bool = false
+    var hasEvents: Bool = false
+    var eventCount: Int = 0
 }
