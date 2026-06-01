@@ -52,11 +52,11 @@ struct SmallWidgetView: View {
             if let day = entry.calendarDays.first(where: { $0.isSelected }) {
                 Text("\(day.day)")
                     .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .foregroundColor(Color(.1A1A1A))
+                    .foregroundColor(Color(hex: "1A1A1A"))
 
                 Text(day.displayText)
                     .font(.system(size: 14, weight: .500))
-                    .foregroundColor(Color(.3B7DD8))
+                    .foregroundColor(Color(hex: "3B7DD8"))
 
                 // 节假日标签
                 if let name = day.holidayName, day.isHoliday {
@@ -65,7 +65,7 @@ struct SmallWidgetView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
-                        .background(Color(.E8743A))
+                        .background(Color(hex: "E8743A"))
                         .clipShape(Capsule())
                 }
             }
@@ -78,7 +78,7 @@ struct SmallWidgetView: View {
                     Text("\(entry.events.count)个事件")
                         .font(.system(size: 11, weight: .400))
                 }
-                .foregroundColor(Color(.999999))
+                .foregroundColor(Color(hex: "999999"))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -99,14 +99,14 @@ struct MediumWidgetView: View {
                 // 月份标题
                 Text(monthTitle)
                     .font(.system(size: 12, weight: .600))
-                    .foregroundColor(Color(.1A1A1A))
+                    .foregroundColor(Color(hex: "1A1A1A"))
 
                 // 星期标题
                 HStack(spacing: 0) {
                     ForEach(["日", "一", "二", "三", "四", "五", "六"], id: \.self) { w in
                         Text(w)
                             .font(.system(size: 8))
-                            .foregroundColor(Color(.999999))
+                            .foregroundColor(Color(hex: "999999"))
                             .frame(maxWidth: .infinity)
                     }
                 }
@@ -118,7 +118,7 @@ struct MediumWidgetView: View {
                             .font(.system(size: 9, weight: day.isSelected ? .bold : .regular))
                             .foregroundColor(widgetDayColor(day))
                             .frame(width: 16, height: 16)
-                            .background(day.isSelected ? Color(.3B7DD8) : Color.clear)
+                            .background(day.isSelected ? Color(hex: "3B7DD8") : Color.clear)
                             .clipShape(Circle())
                     }
                 }
@@ -127,7 +127,7 @@ struct MediumWidgetView: View {
 
             // 分隔线
             Rectangle()
-                .fill(Color(.EEF1F5))
+                .fill(Color(hex: "EEF1F5"))
                 .frame(width: 1)
                 .padding(.vertical, 8)
 
@@ -136,7 +136,7 @@ struct MediumWidgetView: View {
                 if entry.events.isEmpty {
                     Text("暂无安排")
                         .font(.system(size: 12, weight: .400))
-                        .foregroundColor(Color(.999999))
+                        .foregroundColor(Color(hex: "999999"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ForEach(entry.events.prefix(3)) { event in
@@ -148,12 +148,12 @@ struct MediumWidgetView: View {
                             VStack(alignment: .leading, spacing: 1) {
                                 Text(event.title)
                                     .font(.system(size: 11, weight: .500))
-                                    .foregroundColor(Color(.1A1A1A))
+                                    .foregroundColor(Color(hex: "1A1A1A"))
                                     .lineLimit(1)
 
                                 Text(event.timeText)
                                     .font(.system(size: 9))
-                                    .foregroundColor(Color(.999999))
+                                    .foregroundColor(Color(hex: "999999"))
                             }
                         }
                     }
@@ -161,7 +161,7 @@ struct MediumWidgetView: View {
                     if entry.events.count > 3 {
                         Text("还有\(entry.events.count - 3)个...")
                             .font(.system(size: 10))
-                            .foregroundColor(Color(.999999))
+                            .foregroundColor(Color(hex: "999999"))
                     }
                 }
 
@@ -172,13 +172,13 @@ struct MediumWidgetView: View {
                     Button(intent: PreviousDayIntent()) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(Color(.555555))
+                            .foregroundColor(Color(hex: "555555"))
                     }
                     Spacer()
                     Button(intent: NextDayIntent()) {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(Color(.555555))
+                            .foregroundColor(Color(hex: "555555"))
                     }
                 }
             }
@@ -195,8 +195,8 @@ struct MediumWidgetView: View {
 
     private func widgetDayColor(_ day: WidgetCalendarDay) -> Color {
         if day.isSelected { return .white }
-        if day.isHoliday { return Color(.E8743A) }
-        if day.isWorkday { return Color(.555555) }
-        return Color(.1A1A1A)
+        if day.isHoliday { return Color(hex: "E8743A") }
+        if day.isWorkday { return Color(hex: "555555") }
+        return Color(hex: "1A1A1A")
     }
 }
