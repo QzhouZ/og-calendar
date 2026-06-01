@@ -11,7 +11,7 @@ struct MonthNavigationView: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(.555555))
+                    .foregroundColor(Color(hex: "555555"))
                     .frame(width: 44, height: 44)
             }
 
@@ -19,8 +19,8 @@ struct MonthNavigationView: View {
 
             // 年月标题
             Text(viewModel.currentYearMonthString)
-                .font(.system(size: 20, weight: .600))
-                .foregroundColor(Color(.1A1A1A))
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(Color(hex: "1A1A1A"))
 
             Spacer()
 
@@ -30,7 +30,7 @@ struct MonthNavigationView: View {
             } label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(.555555))
+                    .foregroundColor(Color(hex: "555555"))
                     .frame(width: 44, height: 44)
             }
         }

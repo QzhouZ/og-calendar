@@ -7,11 +7,11 @@ struct SelectDateIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "选择日期"
     static var description = IntentDescription("选择日历小组件显示的日期")
 
-    @Parameter(title: "选择日期", default: .now)
+    @Parameter(title: "选择日期", default: Calendar.current.dateComponents([.year, .month, .day], from: Date()))
     var selectedDate: DateComponents?
 
     static var parameterSummary: some ParameterSummary {
-        Summary("显示 \(\.$selectedDate) 的日历")
+        Summary("显示日历")
     }
 }
 

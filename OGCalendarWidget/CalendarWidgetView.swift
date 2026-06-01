@@ -55,13 +55,13 @@ struct SmallWidgetView: View {
                     .foregroundColor(Color(hex: "1A1A1A"))
 
                 Text(day.displayText)
-                    .font(.system(size: 14, weight: .500))
+                    .font(.system(size: 14, weight: .medium))
                     .foregroundColor(Color(hex: "3B7DD8"))
 
                 // 节假日标签
                 if let name = day.holidayName, day.isHoliday {
                     Text(name)
-                        .font(.system(size: 11, weight: .500))
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.white)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 2)
@@ -76,7 +76,7 @@ struct SmallWidgetView: View {
                     Image(systemName: "calendar.badge.clock")
                         .font(.system(size: 10))
                     Text("\(entry.events.count)个事件")
-                        .font(.system(size: 11, weight: .400))
+                        .font(.system(size: 11, weight: .regular))
                 }
                 .foregroundColor(Color(hex: "999999"))
             }
@@ -98,7 +98,7 @@ struct MediumWidgetView: View {
             VStack(spacing: 2) {
                 // 月份标题
                 Text(monthTitle)
-                    .font(.system(size: 12, weight: .600))
+                    .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(Color(hex: "1A1A1A"))
 
                 // 星期标题
@@ -135,7 +135,7 @@ struct MediumWidgetView: View {
             VStack(alignment: .leading, spacing: 4) {
                 if entry.events.isEmpty {
                     Text("暂无安排")
-                        .font(.system(size: 12, weight: .400))
+                        .font(.system(size: 12, weight: .regular))
                         .foregroundColor(Color(hex: "999999"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
@@ -147,7 +147,7 @@ struct MediumWidgetView: View {
 
                             VStack(alignment: .leading, spacing: 1) {
                                 Text(event.title)
-                                    .font(.system(size: 11, weight: .500))
+                                    .font(.system(size: 11, weight: .medium))
                                     .foregroundColor(Color(hex: "1A1A1A"))
                                     .lineLimit(1)
 

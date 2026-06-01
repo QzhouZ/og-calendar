@@ -24,7 +24,7 @@ struct CalendarView: View {
                 // 事件列表
                 EventListView()
             }
-            .background(Color(.F7F8FA))
+            .background(Color(hex: "F7F8FA"))
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -40,8 +40,8 @@ struct WeekdayHeaderView: View {
         HStack(spacing: 0) {
             ForEach(weekdays, id: \.self) { weekday in
                 Text(weekday)
-                    .font(.system(size: 13, weight: .500))
-                    .foregroundColor(Color(.999999))
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(Color(hex: "999999"))
                     .frame(maxWidth: .infinity)
             }
         }

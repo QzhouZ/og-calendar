@@ -9,11 +9,11 @@ struct EventListView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(viewModel.selectedDateString)
-                        .font(.system(size: 16, weight: .600))
-                        .foregroundColor(Color(.1A1A1A))
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(Color(hex: "1A1A1A"))
                     Text(viewModel.selectedLunarString)
-                        .font(.system(size: 13, weight: .400))
-                        .foregroundColor(Color(.999999))
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundColor(Color(hex: "999999"))
                 }
 
                 Spacer()
@@ -22,11 +22,11 @@ struct EventListView: View {
                     viewModel.goToToday()
                 } label: {
                     Text("今天")
-                        .font(.system(size: 13, weight: .500))
-                        .foregroundColor(Color(.3B7DD8))
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(Color(hex: "3B7DD8"))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
-                        .background(Color(.3B7DD8).opacity(0.1))
+                        .background(Color(hex: "3B7DD8").opacity(0.1))
                         .clipShape(Capsule())
                 }
             }
@@ -39,10 +39,10 @@ struct EventListView: View {
                 VStack(spacing: 8) {
                     Image(systemName: "calendar.badge.clock")
                         .font(.system(size: 28))
-                        .foregroundColor(Color(.C0C4CC))
+                        .foregroundColor(Color(hex: "C0C4CC"))
                     Text("暂无安排")
-                        .font(.system(size: 14, weight: .400))
-                        .foregroundColor(Color(.999999))
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundColor(Color(hex: "999999"))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 32)
@@ -79,24 +79,24 @@ struct EventCardView: View {
             // 事件信息
             VStack(alignment: .leading, spacing: 4) {
                 Text(event.title)
-                    .font(.system(size: 15, weight: .500))
-                    .foregroundColor(Color(.1A1A1A))
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(Color(hex: "1A1A1A"))
                     .lineLimit(1)
 
                 Text(event.durationText)
-                    .font(.system(size: 12, weight: .400))
-                    .foregroundColor(Color(.999999))
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(Color(hex: "999999"))
             }
 
             Spacer()
 
             // 日历名称
             Text(event.calendarTitle)
-                .font(.system(size: 11, weight: .400))
-                .foregroundColor(Color(.C0C4CC))
+                .font(.system(size: 11, weight: .regular))
+                .foregroundColor(Color(hex: "C0C4CC"))
         }
         .padding(12)
-        .background(Color(.F7F8FA))
+        .background(Color(hex: "F7F8FA"))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
