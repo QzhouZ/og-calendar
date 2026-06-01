@@ -1,6 +1,6 @@
 import Foundation
 
-final class HolidayService {
+final class HolidayService: @unchecked Sendable {
 
     static let shared = HolidayService()
 

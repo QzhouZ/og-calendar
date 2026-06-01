@@ -30,6 +30,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_EMIT_LOC_STRINGS: true
         CODE_SIGN_STYLE: Automatic
+        SWIFT_STRICT_CONCURRENCY: minimal
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "Apple Development"
@@ -58,13 +59,14 @@ targets:
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_EMIT_LOC_STRINGS: true
         CODE_SIGN_STYLE: Automatic
-        APPLICATION_EXTENSION_API_ONLY: true
-        ASSETCATALOG_COMPILER_SKIP_APP_STORE_DEPLOYMENT: YES
+        SWIFT_STRICT_CONCURRENCY: minimal
       configs:
         Debug:
           CODE_SIGN_IDENTITY: "Apple Development"
+          APPLICATION_EXTENSION_API_ONLY: true
         Release:
           CODE_SIGN_IDENTITY: "Apple Distribution"
+          APPLICATION_EXTENSION_API_ONLY: true
     entitlements:
       path: OGCalendarWidget/OGCalendarWidget.entitlements
       properties:

@@ -194,6 +194,8 @@ if [ "$UNSIGNED" = true ]; then
         CODE_SIGNING_REQUIRED=NO \
         ENABLE_BITCODE=NO \
         PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
+        SWIFT_STRICT_CONCURRENCY=minimal \
+        APPLICATION_EXTENSION_API_ONLY=YES \
         GCC_PREPROCESSOR_DEFINITIONS="DEBUG=0" \
         2>&1 | tee "${BUILD_DIR}/build.log" | tail -30
 
@@ -306,6 +308,7 @@ xcodebuild archive \
     CODE_SIGN_STYLE=Automatic \
     DEVELOPMENT_TEAM="${TEAM_ID}" \
     PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
+    SWIFT_STRICT_CONCURRENCY=minimal \
     2>&1 | tee "${BUILD_DIR}/archive.log" | tail -30
 
 if [ $? -ne 0 ]; then

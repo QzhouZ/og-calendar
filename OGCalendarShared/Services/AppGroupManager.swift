@@ -1,6 +1,6 @@
 import Foundation
 
-final class AppGroupManager {
+final class AppGroupManager: @unchecked Sendable {
 
     static let shared = AppGroupManager()
 

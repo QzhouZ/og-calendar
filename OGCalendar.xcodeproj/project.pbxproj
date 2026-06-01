@@ -11,12 +11,12 @@
 		0552134694687003FEA3BA4E /* MonthNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060F2408B6D409353DEC618B /* MonthNavigationView.swift */; };
 		1444E31F53C7C4592D8DB7E3 /* LunarCalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3419A0BEB003AAA54A607652 /* LunarCalendarService.swift */; };
 		1C381F5715D1378D260178E6 /* EventListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00FCC69E603E15AE747FE6B /* EventListView.swift */; };
+		218C2F3304B18F803109EBEC /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAFFD60F8ED2A87B964E597A /* ColorExtension.swift */; };
 		2AAF215621F098A040732409 /* SolarTermService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7849ACE3201300C4A1615C83 /* SolarTermService.swift */; };
 		38046435E2531EEA8DF3F143 /* EventKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179CDF8DCA48DA34626CA661 /* EventKitService.swift */; };
 		3C687BA3EE8537B53209EB32 /* HolidayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B3594A7909212711D18BA /* HolidayService.swift */; };
 		40AA0B8F844ED0B95BE1385A /* CalendarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F238107163177A032A476BD4 /* CalendarWidget.swift */; };
 		4B474BF139E8BB6AB582BC41 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DCB1CD7FE1812BB40B7BCB6 /* CalendarViewModel.swift */; };
-		5068DF57F4B816BBA15F2517 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7FCA3B9BF5E19AC58E87B63 /* Assets.xcassets */; };
 		50AAC8C34E89AEACDBCDF833 /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971EFE67903E5BDA92CB68C4 /* CalendarDay.swift */; };
 		57F61D057FA1FC7902C4A50E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F948CDCB29604BAFC2809E /* Assets.xcassets */; };
 		6B0AED600D7524083A24F65D /* CalendarEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3967897D6EE5D7063BA8C9C9 /* CalendarEvent.swift */; };
@@ -28,6 +28,7 @@
 		96CF7F9F5DEEBAD734AF88C8 /* CalendarWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C6A1DB1575BCA2CF88A88A /* CalendarWidgetView.swift */; };
 		AF562B6277C6867C6C5BFD80 /* Holiday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8996EB7F4AA2193135E663A7 /* Holiday.swift */; };
 		B81DF1C0035822F9DBF79E97 /* HolidayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346B3594A7909212711D18BA /* HolidayService.swift */; };
+		BDD471BCF0734C9C0B086B99 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAFFD60F8ED2A87B964E597A /* ColorExtension.swift */; };
 		BE074BE2B6FD1C774858A5EF /* OGCalendarWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 05F60780622F09FEC4B3E519 /* OGCalendarWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CB71ACA59507E1E360FEDDFB /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593E9AEDF7B0A1318EBE4B8A /* DayCell.swift */; };
 		D33DF0FC18521D3998F251B8 /* AppGroupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82C405197FCE5936FCE87D3 /* AppGroupManager.swift */; };
@@ -90,15 +91,16 @@
 		BEFBB421ED40133390140378 /* OGCalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OGCalendarApp.swift; sourceTree = "<group>"; };
 		D00FCC69E603E15AE747FE6B /* EventListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListView.swift; sourceTree = "<group>"; };
 		DD2A02A6D4128C5EF3B07C57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		E7FCA3B9BF5E19AC58E87B63 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E82C405197FCE5936FCE87D3 /* AppGroupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupManager.swift; sourceTree = "<group>"; };
 		F238107163177A032A476BD4 /* CalendarWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarWidget.swift; sourceTree = "<group>"; };
+		FAFFD60F8ED2A87B964E597A /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		0A5F897ABA6B9CC5283288BA /* OGCalendarShared */ = {
 			isa = PBXGroup;
 			children = (
+				DCFFD0FEECEDFB32574FF9EF /* Extensions */,
 				6199D6530FD81004B0B8C997 /* Models */,
 				3AF9D6E27E3798E5D08617E5 /* Services */,
 			);
@@ -175,7 +177,6 @@
 		8CD93122E554EADA0BB1153F /* OGCalendarWidget */ = {
 			isa = PBXGroup;
 			children = (
-				E7FCA3B9BF5E19AC58E87B63 /* Assets.xcassets */,
 				F238107163177A032A476BD4 /* CalendarWidget.swift */,
 				89A894D543195442F0F7F08F /* CalendarWidgetBundle.swift */,
 				A55D9FD9A6F481998F99EE2D /* CalendarWidgetIntent.swift */,
@@ -194,6 +195,14 @@
 				8CD93122E554EADA0BB1153F /* OGCalendarWidget */,
 				323339DB4071D5F4CC6A3BBB /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		DCFFD0FEECEDFB32574FF9EF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				FAFFD60F8ED2A87B964E597A /* ColorExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		E1A4A32C86AF8EB10F36DEDC /* OGCalendar */ = {
@@ -238,7 +247,6 @@
 			buildConfigurationList = 305CA75501CAF1C9232686AD /* Build configuration list for PBXNativeTarget "OGCalendarWidget" */;
 			buildPhases = (
 				2AFFA54F912E0D4F364419E0 /* Sources */,
-				F233C4B8C25E43C2BD4B7050 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -258,7 +266,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					C7377AC7A3E33AA269FA5CA7 = {
 						DevelopmentTeam = "";
@@ -300,14 +308,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F233C4B8C25E43C2BD4B7050 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5068DF57F4B816BBA15F2517 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -322,6 +322,7 @@
 				FF94F52F383D1F0DF4781C54 /* CalendarWidgetBundle.swift in Sources */,
 				FA488632122D3BB92AA7260A /* CalendarWidgetIntent.swift in Sources */,
 				96CF7F9F5DEEBAD734AF88C8 /* CalendarWidgetView.swift in Sources */,
+				BDD471BCF0734C9C0B086B99 /* ColorExtension.swift in Sources */,
 				7F54603F9A919114D09CA308 /* EventKitService.swift in Sources */,
 				AF562B6277C6867C6C5BFD80 /* Holiday.swift in Sources */,
 				3C687BA3EE8537B53209EB32 /* HolidayService.swift in Sources */,
@@ -340,6 +341,7 @@
 				F11622E8F12BB00D728E7AD0 /* CalendarGridView.swift in Sources */,
 				02EEA4C623291CD23D4D2231 /* CalendarView.swift in Sources */,
 				4B474BF139E8BB6AB582BC41 /* CalendarViewModel.swift in Sources */,
+				218C2F3304B18F803109EBEC /* ColorExtension.swift in Sources */,
 				CB71ACA59507E1E360FEDDFB /* DayCell.swift in Sources */,
 				38046435E2531EEA8DF3F143 /* EventKitService.swift in Sources */,
 				1C381F5715D1378D260178E6 /* EventListView.swift in Sources */,
@@ -424,14 +426,15 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 6.0;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		1717B286542181D3208F667F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = OGCalendarWidget/OGCalendarWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				CODE_SIGN_STYLE = Automatic;
@@ -446,6 +449,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ogcalendar.app.widget;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -467,6 +471,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ogcalendar.app;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -488,6 +493,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ogcalendar.app;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -495,7 +501,7 @@
 		1EBB0A3179117BF5828B339A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = OGCalendarWidget/OGCalendarWidget.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -510,6 +516,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ogcalendar.app.widget;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -568,7 +575,8 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 6.0;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

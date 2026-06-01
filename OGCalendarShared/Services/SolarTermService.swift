@@ -1,6 +1,6 @@
 import Foundation
 
-final class SolarTermService {
+final class SolarTermService: @unchecked Sendable {
 
     static let shared = SolarTermService()
 

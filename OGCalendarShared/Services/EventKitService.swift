@@ -1,12 +1,12 @@
 import Foundation
 import EventKit
 
-final class EventKitService: ObservableObject {
+final class EventKitService: @unchecked Sendable {
 
     static let shared = EventKitService()
 
     private let eventStore = EKEventStore()
-    @Published var authorizationStatus: EKAuthorizationStatus = .notDetermined
+    var authorizationStatus: EKAuthorizationStatus = .notDetermined
 
     private init() {
         authorizationStatus = EKEventStore.authorizationStatus(for: .event)

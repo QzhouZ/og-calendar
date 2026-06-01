@@ -1,6 +1,6 @@
 import Foundation
 
-struct CalendarDay: Identifiable {
+struct CalendarDay: Identifiable, Sendable {
     let id: String          // 格式: "yyyy-MM-dd"
     let date: Date           // 公历日期
     let year: Int

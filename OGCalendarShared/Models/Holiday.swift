@@ -1,13 +1,13 @@
 import Foundation
 
 // MARK: - Holiday Types
-enum HolidayType: String, Codable {
+enum HolidayType: String, Codable, Sendable {
     case holiday  // 法定放假
     case workday   // 调休上班
 }
 
 // MARK: - Holiday Model
-struct Holiday: Codable, Identifiable {
+struct Holiday: Codable, Identifiable, Sendable {
     let id: String      // 格式: "2025-01-01"
     let name: String    // 节假日名称
     let type: HolidayType

@@ -1,6 +1,6 @@
 import Foundation
 
-final class LunarCalendarService {
+final class LunarCalendarService: @unchecked Sendable {
 
     static let shared = LunarCalendarService()
 
