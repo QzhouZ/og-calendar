@@ -161,6 +161,7 @@ else
     echo -e "  Mode:        ${CYAN}Signed (Team: ${TEAM_ID})${NC}"
 fi
 echo "  Bundle ID:   ${BUNDLE_ID}"
+echo "  Widget ID:   ${BUNDLE_ID}.widget"
 echo "  Export Method: ${EXPORT_METHOD}"
 echo "  Workspace:   ${WORKSPACE_DIR}"
 echo ""
@@ -183,6 +184,7 @@ if [ "$UNSIGNED" = true ]; then
 
     DERIVED_DATA="${BUILD_DIR}/DerivedData"
 
+    set +e
     xcodebuild clean build \
         -project "${WORKSPACE_DIR}/${PROJECT_NAME}.xcodeproj" \
         -scheme "${SCHEME}" \
@@ -193,14 +195,20 @@ if [ "$UNSIGNED" = true ]; then
         CODE_SIGN_IDENTITY="" \
         CODE_SIGNING_REQUIRED=NO \
         ENABLE_BITCODE=NO \
-        PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
+        APP_BUNDLE_ID="${BUNDLE_ID}" \
+        WIDGET_BUNDLE_ID="${BUNDLE_ID}.widget" \
         SWIFT_STRICT_CONCURRENCY=minimal \
-        APPLICATION_EXTENSION_API_ONLY=YES \
         GCC_PREPROCESSOR_DEFINITIONS="DEBUG=0" \
-        2>&1 | tee "${BUILD_DIR}/build.log" | tail -30
+        2>&1 | tee "${BUILD_DIR}/build.log" | tail -80
 
-    if [ $? -ne 0 ]; then
+    BUILD_STATUS=${PIPESTATUS[0]}
+    set -e
+
+    if [ "${BUILD_STATUS}" -ne 0 ]; then
         echo -e "${RED}Build failed!${NC}"
+        echo ""
+        echo -e "${YELLOW}Relevant errors from build log:${NC}"
+        grep -E "error:|fatal error:|CompileAssetCatalog|actool|The following build commands failed" "${BUILD_DIR}/build.log" | tail -120 || true
         exit 1
     fi
 
@@ -299,6 +307,7 @@ cat > "${EXPORT_OPTIONS}" << EOF
 EOF
 
 # Archive
+set +e
 xcodebuild archive \
     -project "${WORKSPACE_DIR}/${PROJECT_NAME}.xcodeproj" \
     -scheme "${SCHEME}" \
@@ -307,12 +316,19 @@ xcodebuild archive \
     -archivePath "${ARCHIVE_PATH}" \
     CODE_SIGN_STYLE=Automatic \
     DEVELOPMENT_TEAM="${TEAM_ID}" \
-    PRODUCT_BUNDLE_IDENTIFIER="${BUNDLE_ID}" \
+    APP_BUNDLE_ID="${BUNDLE_ID}" \
+    WIDGET_BUNDLE_ID="${BUNDLE_ID}.widget" \
     SWIFT_STRICT_CONCURRENCY=minimal \
-    2>&1 | tee "${BUILD_DIR}/archive.log" | tail -30
+    2>&1 | tee "${BUILD_DIR}/archive.log" | tail -80
 
-if [ $? -ne 0 ]; then
+ARCHIVE_STATUS=${PIPESTATUS[0]}
+set -e
+
+if [ "${ARCHIVE_STATUS}" -ne 0 ]; then
     echo -e "${RED}Archive failed!${NC}"
+    echo ""
+    echo -e "${YELLOW}Relevant errors from archive log:${NC}"
+    grep -E "error:|fatal error:|CompileAssetCatalog|actool|The following build commands failed" "${BUILD_DIR}/archive.log" | tail -120 || true
     exit 1
 fi
 

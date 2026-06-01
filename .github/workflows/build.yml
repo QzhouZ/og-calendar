@@ -59,13 +59,13 @@ jobs:
           ./setup.sh
 
       - name: Build Unsigned IPA
-        if: ${{ github.event.inputs.unsigned != 'false' }}
+        if: ${{ github.event_name == 'push' || github.event.inputs.unsigned != 'false' }}
         run: |
           chmod +x build/build_ipa.sh
           ./build/build_ipa.sh -u -b "${{ env.BUNDLE_ID }}"
 
       - name: Build Signed IPA
-        if: ${{ github.event.inputs.team_id != '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.unsigned == 'false' && github.event.inputs.team_id != '' }}
         run: |
           chmod +x build/build_ipa.sh
           ./build/build_ipa.sh -t "${{ github.event.inputs.team_id }}" -b "${{ env.BUNDLE_ID }}"
