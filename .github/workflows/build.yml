@@ -1,0 +1,95 @@
+name: Build IPA
+
+on:
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      unsigned:
+        description: 'Build unsigned IPA (for Sideloadly)'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      team_id:
+        description: 'Apple Team ID (leave empty for unsigned build)'
+        required: false
+        default: ''
+        type: string
+      bundle_id:
+        description: 'Bundle Identifier'
+        required: false
+        default: 'com.ogcalendar.app'
+        type: string
+
+  # 推送到 main 分支时自动构建
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+env:
+  SCHEME: OGCalendar
+  PROJECT_NAME: OGCalendar
+  BUNDLE_ID: ${{ github.event.inputs.bundle_id || 'com.ogcalendar.app' }}
+
+jobs:
+  build:
+    name: Build IPA
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '16.0'
+
+      - name: Install xcodegen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: |
+          chmod +x setup.sh
+          ./setup.sh
+
+      - name: Build Unsigned IPA
+        if: ${{ github.event.inputs.unsigned != 'false' }}
+        run: |
+          chmod +x build/build_ipa.sh
+          ./build/build_ipa.sh -u -b "${{ env.BUNDLE_ID }}"
+
+      - name: Build Signed IPA
+        if: ${{ github.event.inputs.team_id != '' }}
+        run: |
+          chmod +x build/build_ipa.sh
+          ./build/build_ipa.sh -t "${{ github.event.inputs.team_id }}" -b "${{ env.BUNDLE_ID }}"
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OGCalendar-IPA
+          path: |
+            *.ipa
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## Build Complete ✅" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          IPA_FILE=$(find . -name "*.ipa" -maxdepth 1 | head -1)
+          if [ -n "$IPA_FILE" ]; then
+            SIZE=$(du -h "$IPA_FILE" | cut -f1)
+            echo "- **File**: \`$(basename $IPA_FILE)\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Size**: ${SIZE}" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 安装方式" >> $GITHUB_STEP_SUMMARY
+            echo "1. 下载 IPA 文件" >> $GITHUB_STEP_SUMMARY
+            echo "2. 使用 [Sideloadly](https://sideloadly.io) 签名安装到 iPhone" >> $GITHUB_STEP_SUMMARY
+            echo "3. 免费账号签名 7 天有效" >> $GITHUB_STEP_SUMMARY
+          fi

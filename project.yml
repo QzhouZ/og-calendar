@@ -1,0 +1,67 @@
+name: OGCalendar
+options:
+  bundleIdPrefix: com.ogcalendar
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+    DEVELOPMENT_TEAM: ""
+    GENERATE_INFOPLIST_FILE: false
+
+targets:
+  OGCalendar:
+    type: application
+    platform: iOS
+    sources:
+      - path: OGCalendar
+      - path: OGCalendarShared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ogcalendar.app
+        INFOPLIST_FILE: OGCalendar/Info.plist
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_EMIT_LOC_STRINGS: true
+        CODE_SIGN_STYLE: Automatic
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+        Release:
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+    dependencies:
+      - target: OGCalendarWidget
+    entitlements:
+      path: OGCalendar/OGCalendar.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+
+  OGCalendarWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: OGCalendarWidget
+      - path: OGCalendarShared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ogcalendar.app.widget
+        INFOPLIST_FILE: OGCalendarWidget/Info.plist
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_EMIT_LOC_STRINGS: true
+        CODE_SIGN_STYLE: Automatic
+        APPLICATION_EXTENSION_API_ONLY: false
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "Apple Development"
+        Release:
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+    entitlements:
+      path: OGCalendarWidget/OGCalendarWidget.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
