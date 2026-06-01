@@ -24,6 +24,8 @@
 	<true/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>极简日历需要访问日历以显示您的日程安排</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>极简日历需要完整访问日历权限以显示和管理您的日程安排</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>
